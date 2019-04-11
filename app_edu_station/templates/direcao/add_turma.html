@@ -1,0 +1,166 @@
+{% extends "../base_index.html" %}
+{% load static %}
+
+{% load filtros_jinja %}
+
+{{% block title %}
+    Direcao Workstation
+{% endblock title %}
+
+{% block header_title %}
+    <a href="{% url 'direcao' %}" class="display-4 font-weight-bold text-dark">Direção Workstation</a>
+{% endblock header_title%}
+
+{% block opcoes-icon%}
+	<div><a href="{% url 'alterar_direcao' %}">Alterar</a></div>
+	<div><a href="{% url 'user_logout' %}">Exit</a></div>
+{% endblock%}
+
+
+
+{% block content %}
+	{% if validacao == 'validado' %}
+		<div class=" mt-4 alert alert-success">Turma criada com sucesso</div>
+	{% else %}
+		{% for message in messages %}
+			<div class="mt-4 alert alert-danger">{{ message }}</div>
+		{% endfor %}
+	{% endif %}
+
+	<div class="text-center border-bottom border-dark mb-3">
+		<h3 class="display-5 font-weight-bold">Turma</h3>
+	</div>
+
+	<form method="POST" class="mt-4">
+		{% csrf_token %}
+		
+		<div class="form-group row">
+			{{ form.nome.errors }}
+			<label class="col-sm-3 col-form-label">Digite o nome da turma</label>
+			<div class="col-sm-9">
+				{{ form.nome | add_class:'form-control' }}
+			</div>
+		</div>
+
+		<div class="form-group row">
+			{{ form.ano.errors }}
+			<label class="col-sm-3 col-form-label">Ano</label>
+			<div class="col-sm-9">
+				{{ form.ano | add_class:'form-control' }}
+			</div>
+		</div>
+
+		<div class="form-group row">
+			{{ form.data_criacao.errors }}
+			<label class="col-sm-3 col-form-label">Data de criacao</label>
+			<div class="col-sm-9">
+				{{ form.data_criacao | add_class:'form-control' }}
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="ml-auto mr-auto col-3 mt-4 col-2 btn btn-success" name="vincular_docentes" onclick="vincular_docente()">Vincular Docentes</div>
+			<div class="mr-auto ml-auto col-3 mt-4 col-2 btn btn-success" name="vincular_docentes" onclick="vincular_alunos()">Vincular Alunos</div>
+		</div>
+
+		<div class="row">
+			<div class="col-5"></div>
+			<input class="mt-4 col-2 btn btn-primary" type="submit" name="submit" value="Criar">
+			<div class="col-7"></div>
+		</div>
+		
+		<!-- vincular docente -->
+		<div id="vincular-docente" class="bg-modal">
+			
+			<div class="modal-content">
+				<div class="close" onclick="btn_close()">+</div>
+				<div class="text-center border-bottom border-dark">
+					<h3 class="display-4 font-weight-bold">Vincular Docentes</h3>
+				</div>
+
+				<div class="text-center">
+					<h6 class="display-6 mt-2">Docente</h6>
+				</div>
+
+				<select id="select_docente" class="form-control form-control" onchange="show_content()">
+					<option>----------------------</option>
+					{% for i in docentes %}
+						<option value="{{ i.cpf }}">{{ i.nome }}</option>
+					{% endfor %}
+				</select>
+			
+			
+				{% for i in docentes %}
+					<div id="{{i.cpf}}" class="content">
+						{% for j in disciplinas %}
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="{{i.cpf}};{{j.id}}"> 
+								<label class="form-check-label" >{{j.nome}}</label>
+							</div>
+						{% endfor %}
+					</div>
+				{% endfor %}
+			</div>
+
+		</div> 
+
+
+		<!-- vincular alunos -->
+		<div id="vincular-alunos" class="bg-modal">
+			<div class="modal-content">
+				<div class="close" onclick="btn_close()">+</div>
+				<div class="text-center border-bottom border-dark">
+					<h3 class="display-4 font-weight-bold">Vicular Aluno(a)</h3>
+				</div>
+				
+				<div id="content-alunos" class="content">
+
+					{% for i in alunos %}
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" name="{{i.cpf}}"> 
+							<label class="form-check-label" >{{i.nome}}</label>
+						</div>
+					{% endfor %}
+				</div>
+
+			</div>
+		</div>
+	</form>
+
+
+	<script type="text/javascript" src="{% static 'js/turma.js' %}"></script>
+	<script type="text/javascript">
+		function hide_content(){
+			let classes = document.getElementsByClassName('content')
+
+			for(let i = 0; i < classes.length; i++)
+				classes[i].style.display = 'none';
+		}
+
+		function vincular_docente(){
+			hide_content()
+
+			let div = document.getElementById('vincular-docente')
+			div.style.display = 'flex'
+		}	
+
+		function show_content(){
+			hide_content()
+
+			let select = document.getElementById('select_docente')
+			let cpf = select.options[select.selectedIndex].value
+			display_block_content(cpf)
+		}
+
+		function display_block_content(id){
+			document.getElementById(id).style.display = 'block'
+		}
+
+		function vincular_alunos(){
+			let div = document.getElementById('vincular-alunos')
+			document.getElementById('content-alunos').style.display = 'block'
+			div.style.display = 'flex'
+		}
+
+	</script>
+{% endblock %}

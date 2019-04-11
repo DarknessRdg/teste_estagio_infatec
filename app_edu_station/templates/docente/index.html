@@ -1,0 +1,46 @@
+{% extends "../base_index.html" %}
+
+{{% block title %}
+    Docente Workstation
+{% endblock title %}
+
+{% block header_title %}
+    <h1 class="display-4 font-weight-bold">Docente Workstation</h1>
+{% endblock header_title%}
+
+{% block opcoes-icon%}
+	<div><a href="{% url 'alterar_docente' %}">Alterar</a></div>
+	<div><a href="{% url 'user_logout' %}">Exit</a></div>
+{% endblock%}
+
+{% block content %}	
+	<div class="text-center border-bottom border-dark mb-3">
+		<h3 class="display-5 font-weight-bold">Minhas Turmas</h3>
+	</div>
+
+	<div class="row">
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>Nome da turma</th>
+					<th>Ano</th>
+					<th>Quantidade de Alunos</th>
+					<th>Opções</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for i in docente.minhas_turmas %}
+					<tr>
+						<td class="nome">{{ i.turma.nome }}</td>
+						<td class="cpf">{{ i.turma.ano }}</td>
+						<td>{{ i.quantidade_alunos }}</td>
+						<td>	
+							<a href="{% url 'docente_ver_turma' i.turma.id %}">Ver turma</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "../base_index.html" %}
+
+{{% block title %}
+    Direcao Workstation
+{% endblock title %}
+
+{% block header_title %}
+    <h1 class="display-4 font-weight-bold">Direção Workstation</h1>
+{% endblock header_title%}
+
+{% block opcoes-icon%}
+	<div><a href="{% url 'alterar_direcao' %}">Alterar</a></div>
+	<div><a href="{% url 'user_logout' %}">Exit</a></div>
+{% endblock%}
+
+
+{% block content %}	
+	<div class="row mt-4">		
+		<div class="col-3">
+			<a href="{% url 'direcao_direcao' %}" class="caixa btn btn-lg btn-box btn-success">Direção</a>
+		</div>
+		
+		<div class="col-3">
+			<a href="{% url 'direcao_docente' %}" class="caixa btn btn-lg btn-box btn-success">Docente</a>
+		</div>
+		
+		<div class="col-3">
+			<a href="{% url 'direcao_aluno' %}" class="caixa btn btn-lg btn-box btn-success">Aluno (a)</a>
+		</div>
+
+		<div class="col-3">
+			<a href="{% url 'direcao_disciplina' %}" class="caixa btn btn-lg btn-box btn-success">Disciplina</a>
+		</div>
+
+		<div class="col-3 mt-5">
+			<a href="{% url 'direcao_turma' %}" class="caixa btn btn-lg btn-box btn-success">Turma</a>
+		</div>
+	</div>
+{% endblock %}

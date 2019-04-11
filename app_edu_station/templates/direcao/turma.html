@@ -1,0 +1,167 @@
+{% extends "../base_index.html" %}
+{% load staticfiles %}
+
+{{% block title %}
+    Direcao Workstation
+{% endblock title %}
+
+{% block header_title %}
+    <a href="{% url 'direcao' %}" class="display-4 font-weight-bold text-dark">Direção Workstation</a>
+{% endblock header_title%}
+
+
+{% block opcoes-icon%}
+	<div><a href="{% url 'alterar_direcao' %}">Alterar</a></div>
+	<div><a href="{% url 'user_logout' %}">Exit</a></div>
+{% endblock%}
+
+
+{% block content %}	
+	<div class="text-center border-bottom border-dark mb-3">
+		<h3 class="display-5 font-weight-bold">Turma
+			<a href="{% url 'add_turma' %}" class="text-dark"><i class="fas fa-plus-circle"></i></a>
+		</h3>
+	</div>
+
+	<div class="row">		
+		<div class="form-group col-12 row">
+			<label class="col-2">Digite o nome</label>
+			<input id="input-pesquisar" class="form-control col-7" type="text" name="pesquisar">
+			<input class="btn btn-primary col-2 ml-3" type="button" name="submit" value="pesquisar" onclick="pesquisar()">
+		</div>
+	</div>
+
+	<div class="row">
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>Nome da Turma</th>
+					<th>Ano</th>
+					<th>Data de criação</th>
+					<th>Opções</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for i in turmas %}
+					<tr>
+						<td class="nome">{{ i.nome }}</td>
+						<td class="cpf">{{ i.ano }}</td>
+						<td>{{ i.data_criacao }}</td>
+						<td>	
+							<button class="btn btn-link mr-3" onclick="ver_docente( {{ i.id }} )" >Ver docentes</button>
+							<button class="btn btn-link mr-3" onclick="ver_aluno( {{ i.id }} )">Ver alunos</button>
+							<a href="{% url 'direcao_excluir_turma' i.id %}">Excluir</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+ 
+	<!-- modal docentes -->
+	{% for turma in turmas %}
+		<div id="docente{{ turma.id }}" class="bg-modal">
+				
+			<div class="modal-content">
+				<div class="close" onclick="btn_close()">+</div>
+				
+				<div class="text-center border-bottom border-dark">
+					<h3 class="display-4 font-weight-bold">Docentes</h3>
+				</div>
+				
+				<div class="text-center">
+					<h6 class="display-6 mt-2">{{ turma.nome | upper }} - {{ turma.ano | upper }} ANO</h6>
+				</div>
+				<div class="content">
+					{% for i in turma_disc %}
+						{% if i.turma.id == turma.id %}
+						<div>{{ i.docente.nome }} / {{ i.disciplina.nome }}</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+
+	<!-- modal alunos -->
+	{% for turma in turmas %}
+	<div id="aluno{{ turma.id }}" class="bg-modal">
+			
+			<div class="modal-content">
+				<div class="close" onclick="btn_close()">+</div>
+				
+				<div class="text-center border-bottom border-dark">
+					<h3 class="display-4 font-weight-bold">Alunos matriculados</h3>
+				</div>
+
+				<div class="text-center">
+					<h6 class="display-6 mt-2">{{ turma.nome | upper }} - {{ turma.ano | upper }} ANO</h6>
+				</div>
+				
+				
+
+				<div class="content">
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<td>Nome</td>
+								<td>Data_nascimento</td>
+								<td>CPF</td>
+								<td>Opcoes</td>
+							</tr>
+						</thead>
+						<tbody>
+								
+								{% for j in alunos %}
+									{% if turma.id == j.turma.id %}	
+										<tr>
+											<td>{{ j.aluno.nome }}</td>
+											<td>{{ j.aluno.nascimento }}</td>
+											<td class="cpf">{{ j.aluno.cpf }}</td>
+											<td>
+												<a href="{% url 'boletim' j.aluno.cpf %}"><button class="btn btn-link">Emitir boletim</button></a>
+											</td>
+										</tr>
+									
+									{% endif %}
+								{% endfor %}
+							
+						</tbody>
+					</table>
+				</div>
+			</div>
+			
+	</div>	
+	{% endfor %}
+
+	<script type="text/javascript" src="{% static 'js/turma.js' %}"></script>
+	<script type="text/javascript">	
+		function pesquisar(){
+			var tabela = document.querySelectorAll('tbody')[0];
+			var busca = document.getElementById('input-pesquisar').value
+
+			if (tabela != null) {
+		    	if (tabela.parentNode) {
+		        	selecionaTodosOsElemento(busca);
+		    	}
+			}
+		}
+				
+		function selecionaTodosOsElemento(busca){
+		    var linhas = document.querySelectorAll('tbody > tr');
+		 
+		    for (linha of linhas) {
+		        var nome = linha.children[0].innerText;
+		        
+		        var localizado = nome.toLowerCase().indexOf(busca.toLowerCase());
+		       
+		        if (localizado == -1) {
+		            linha.classList.add('d-none')
+		        } else {
+		            linha.classList.remove('d-none')
+		        }
+		    }
+		}	 
+	</script>
+
+{% endblock %}

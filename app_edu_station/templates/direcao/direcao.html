@@ -1,0 +1,87 @@
+{% extends "../base_index.html" %}
+{% load staticfiles %}
+{{% block title %}
+    Direcao Workstation
+{% endblock title %}
+
+{% block header_title %}
+    <a href="{% url 'direcao' %}" class="display-4 font-weight-bold text-dark">Direção Workstation</a>
+{% endblock header_title%}
+
+{% block opcoes-icon%}
+	<div><a href="{% url 'alterar_direcao' %}">Alterar</a></div>
+	<div><a href="{% url 'user_logout' %}">Exit</a></div>
+{% endblock%}
+
+
+{% block content %}	
+	<div class="text-center border-bottom border-dark mb-3">
+		<h3 class="display-5 font-weight-bold">Direção
+			<a href="{% url 'direcao_add_direcao' %}" class="text-dark"><i class="fas fa-plus-circle"></i></a>
+		</h3>
+	</div>
+
+	<div class="row">		
+		<div class="form-group col-12 row">
+			<label class="col-2">Digite o nome</label>
+			<input id="input-pesquisar" class="form-control col-7" type="text" name="pesquisar">
+			<input class="btn btn-primary col-2 ml-3" type="button" name="submit" value="pesquisar" onclick="pesquisar()">
+		</div>
+	</div>
+
+	<div class="row">
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>Nome</th>
+					<th>cpf</th>
+					<th>Data de nascimento</th>
+					<th>Opções</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for i in direcao %}
+					<tr>
+						<td class="nome">{{ i.nome }}</td>
+						<td class="cpf">{{ i.cpf }}</td>
+						<td>{{ i.nascimento }}</td>
+						<td class="">	
+							<a href="{% url 'direcao_alterar_direcao' i.cpf %}" class="mr-3">Alterar</a>
+							<a href="{% url 'direcao_excluir_direcao' i.cpf %}">Excluir</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	<script type="text/javascript" src="{% static 'js/docente.js' %}"></script>
+	<script type="text/javascript">	
+		function pesquisar(){
+			var tabela = document.querySelectorAll('tbody')[0];
+			var busca = document.getElementById('input-pesquisar').value
+
+			if (tabela != null) {
+		    	if (tabela.parentNode) {
+		        	selecionaTodosOsElemento(busca);
+		    	}
+			}
+		}
+				
+		function selecionaTodosOsElemento(busca){
+		    var linhas = document.querySelectorAll('tbody > tr');
+		 
+		    for (linha of linhas) {
+		        var nome = linha.children[0].innerText;
+		        
+		        var localizado = nome.toLowerCase().indexOf(busca.toLowerCase());
+		       
+		        if (localizado == -1) {
+		            linha.classList.add('d-none')
+		        } else {
+		            linha.classList.remove('d-none')
+		        }
+		    }
+		}	 
+	</script>	
+{% endblock %}

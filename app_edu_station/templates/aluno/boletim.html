@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Boletim do aluno</title>
+
+	<!-- bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</head>
+<body>
+	<div class="container-fluid border border-dark">
+		
+		<header class="row border border-dark p-4">
+			<h5 class="col-12 font-weight-normal pl-4">Edu Station</h5>
+			<h5 class="col-12 font-weight-normal">Nome aluno (a): {{ aluno.nome | title }}</h5>
+			<h5 class="col-12 font-weight-normal">cpf: {{ aluno.cpf }}</h5>
+			<h5 class="col-12 font-weight-normal">Data de nascimento: {{ aluno.nascimento}}</h5>
+		</header>
+
+		<main class="row mt-4">
+			<h5 class="display-4 col-12 text-center font-weight-bold">Boletim</h5>
+			<h5 class="display-5 col-12 text-center font-weight-bold mt-2">
+				{{ aluno.minha_turma.nome | title }} - Ano {{ aluno.minha_turma.ano }} 
+			</h5>
+
+			<div id="boletim" class="container col-12 p-5">
+				<div class="row">
+					
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>Disciplina</th>
+								<th>Nota 1</th>
+								<th>Nota 2</th>
+								<th>Recuperação</th>
+								<th>Média Final</th>
+								<th>Situação</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for i in aluno.minhas_disciplinas %}
+							<tr>
+								<td>{{ i.turma_disciplina.disciplina.nome | title }}</td>
+								<td>{{ i.nota_1 }}</td>
+								<td>{{ i.nota_2 }}</td>
+								{% if i.nota_recuperacao %}
+									<td>{{ i.nota_recuperacao }}</td>
+								{% else %}
+									<td class="text-center">---</td>
+									
+								 {% endif %}
+								<td>{{ i.media }}</td>
+								
+								{% if i.aprovado %}
+									<td>Aprovado</td>
+								{% else %}
+									<td>Reprovado</td>
+								 {% endif %}
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</main>
+	</div>
+</body>
+</html>

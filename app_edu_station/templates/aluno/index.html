@@ -1,0 +1,66 @@
+{% extends "../base_index.html" %}
+
+{{% block title %}
+    Aluno Workstation
+{% endblock title %}
+
+{% block header_title %}
+    <h1 class="display-4 font-weight-bold">Aluno (a) Workstation</h1>
+{% endblock header_title%}
+
+{% block opcoes-icon%}
+	<div><a href="{% url 'alterar_aluno' %}">Alterar</a></div>
+	<div><a href="{% url 'user_logout' %}">Exit</a></div>
+{% endblock%}
+
+{% block content %}
+	<h5 class="display-4 col-12 text-center font-weight-bold">Boletim</h5>
+	<h5 class="display-5 col-12 text-center font-weight-bold mt-2">
+		{{ aluno.minha_turma.nome | title }} - Ano {{ aluno.minha_turma.ano }} 
+	</h5>
+
+	<div id="boletim" class="container col-12 p-5">
+		<div class="row">
+			
+			<table class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th>Disciplina</th>
+						<th>Nota 1</th>
+						<th>Nota 2</th>
+						<th>Recuperação</th>
+						<th>Média Final</th>
+						<th>Situação</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for i in aluno.minhas_disciplinas %}
+					<tr>
+						<td>{{ i.turma_disciplina.disciplina.nome | title }}</td>
+						<td>{{ i.nota_1 }}</td>
+						<td>{{ i.nota_2 }}</td>
+						{% if i.nota_recuperacao %}
+							<td>{{ i.nota_recuperacao }}</td>
+						{% else %}
+							<td class="text-center">---</td>
+							
+						 {% endif %}
+						<td>{{ i.media }}</td>
+						
+						{% if i.aprovado %}
+							<td>Aprovado</td>
+						{% else %}
+							<td>Reprovado</td>
+						 {% endif %}
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>	
+
+	<div class="text-center">
+		<a href="{% url 'boletim' aluno.cpf %}" target="_blanck" class="text-dark"><i class="fas fa-print display-2"></i></a>
+	</div>
+
+{% endblock %}

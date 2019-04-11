@@ -1,0 +1,88 @@
+header{
+	height: 13em;
+	border: 1px solid black;
+}
+
+.display-5{
+	font-size: 41px;
+}
+
+.display-6{
+	font-size: 38px;
+}
+
+.centralizar-container{
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.container-links{
+	margin-top: 3em;
+	height: 25em;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.container-links > a{
+	line-height: 5em;
+	width: 20%;
+	text-align: center;
+}
+
+.user-icon{
+	text-align: center;
+	font-size: 8em;
+}
+
+#opcoes-icon{
+	display: none;
+	background: white;
+	font-size: 25px;
+	text-align: left;
+	border: 1px solid black;
+	position: absolute;
+	width: 300px;
+	height: 100px;
+	bottom: -30px;
+	left: -180px;
+}
+
+#opcoes-icon > div{
+	border: 1px solid black;
+	width: 100%;
+	height: 50%;
+}
+
+#opcoes-icon a {
+	margin-left: 20px;
+}
+
+#opcoes-icon a:hover{
+	font-size: 1.1em;
+}
+
+.relative{
+	position: relative;
+}
+
+.btn-box{
+	line-height: 5em;
+	width: 100%;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+#alterar-senha{
+	display: none;
+}
+
+.container-menor{
+	width: 85%;
+	margin: 0 auto;
+}

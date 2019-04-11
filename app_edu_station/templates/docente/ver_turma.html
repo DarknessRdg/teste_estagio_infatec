@@ -1,0 +1,110 @@
+{% extends "../base_index.html" %}
+
+{{% block title %}
+    Docente Workstation
+{% endblock title %}
+
+{% block header_title %}
+    <a href="{% url 'docente' %}" class="display-4 font-weight-bold text-dark">Docente Workstation</a>
+{% endblock header_title%}
+
+{% block opcoes-icon%}
+	<div><a href="{% url 'alterar_docente' %}">Alterar</a></div>
+	<div><a href="{% url 'user_logout' %}">Exit</a></div>
+{% endblock%}
+
+{% block content %}	
+	<div class="text-center border-bottom border-dark mb-3">
+		<h3 class="display-5 font-weight-bold">Minhas Turmas</h3>
+	</div>
+
+	<div class="container-menor">
+		
+		<div class="form-group row">
+			<div class="col-12" style="font-size: 1.13em;">{{ turma.nome | title }} - {{ turma.ano }} ano</div>
+			<div class="col-3 mt-3">
+				<select id="disciplina_select" class="form-control" onchange="mostar_alunos({{ turma.id }})">
+					<option>---------</option>
+					{% for i in disciplinas %}
+			        	<option value="{{ i.id }}">{{ i.nome }}</option>
+			        {% endfor %}
+		      </select>
+
+			</div>
+		</div>
+
+		<div class="text-center border-bottom border-dark mb-3">
+			<h3 class="display-6 font-weight-bold">Alunos:</h3>
+		</div>
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>Nome</th>
+					<th>Data de nascimento</th>
+					<th>Nota 1</th>
+					<th>Nota 2</th>
+					<th>Recuperacao</th>
+					<th>Media Final</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+				{% for i in alunos %}
+					<tr class="{{ i.turma_disciplina.disciplina.id }} d-none">
+						<td>{{ i.aluno.nome }}</td>
+						<td>{{ i.aluno.nascimento }}</td>
+						<td>{{ i.nota_1 }}</td>
+						<td>{{ i.nota_2 }}</td>
+						
+						{% if i.nota_recuperacao %}
+							<td>{{ i.nota_recuperacao }}</td>
+						{% else %}
+							<td>0</td>
+						{% endif %}
+						<td>{{ i.media }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		<div id="links">
+			{% for i in disciplinas %}
+				<a id="atualizar_medias-{{i.id}}" href="{% url 'atualizar_medias' turma.id i.id %}" class="d-none text-center btn btn-primary">Atualizar médias</a>
+			{% endfor %}
+		</div>
+	
+	</div>	
+
+	<form>
+		{% csrf_token %}
+
+		{{ form.nota_1 }}
+	</form>
+
+	<script type="text/javascript">
+		function hide(){
+			let trs = document.querySelectorAll('table > tbody > tr')
+			for(let i = 0; i < trs.length; i++)
+				trs[i].classList.add('d-none')			
+
+			let links = document.querySelectorAll('#links > a')
+			for (let i = 0; i < links.length; i++)
+				links[i].classList.add('d-none')			
+		}
+		
+		function mostar_alunos(turma_id){
+			hide()
+			
+			let select = document.getElementById('disciplina_select')
+			let id = select.options[select.selectedIndex].value
+			let trs = document.getElementsByClassName(id)
+
+			for(let i = 0; i < trs.length; i++)
+				trs[i].classList.remove('d-none')
+
+			document.getElementById('atualizar_medias-' + id).classList.remove('d-none')
+			
+		}
+	</script>
+	
+{% endblock %}

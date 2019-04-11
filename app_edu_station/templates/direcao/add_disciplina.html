@@ -1,0 +1,59 @@
+{% extends "../base_index.html" %}
+{% load filtros_jinja %}
+
+{{% block title %}
+    Direcao Workstation
+{% endblock title %}
+
+{% block header_title %}
+    <a href="{% url 'direcao' %}" class="display-4 font-weight-bold text-dark">Direção Workstation</a>
+{% endblock header_title%}
+
+{% block opcoes-icon%}
+	<div><a href="{% url 'alterar_direcao' %}">Alterar</a></div>
+	<div><a href="{% url 'user_logout' %}">Exit</a></div>
+{% endblock%}
+
+
+{% block content %}
+	{% if validacao == 'validado' %}
+		<div class=" mt-4 alert alert-success">Disciplina criada com sucesso</div>
+	{% else %}
+		{% for message in messages %}
+			<div class="mt-4 alert alert-danger">{{ message }}</div>
+		{% endfor %}
+	{% endif %}
+
+	<div class="text-center border-bottom border-dark mb-3">
+		<h3 class="display-5 font-weight-bold">Disciplina</h3>
+	</div>
+
+	<form method="POST" class="row mt-4">
+		{% csrf_token %}
+		<div class="col-2"></div>
+		<div class="col-8">
+			<div class="form-group mt-2">
+				{{ form.nome.errors }}
+				<label class="col-form-label">Digite a disciplina</label>
+				<div>
+					{{ form.nome | add_class:'form-control' }}
+				</div>
+			</div>
+			
+			<div class="form-group mt-2">
+				{{ form.data_criacao.errors }}
+				<label class="col-form-label">Data de criação</label>
+				<div>
+					{{ form.data_criacao | add_class:'form-control'}}
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-5"></div>
+				<input class="mt-4 col-2 btn btn-primary" type="submit" name="submit" value="Criar">
+				<div class="col-7"></div>
+			</div>
+		</div>
+	</form>
+
+{% endblock %}
